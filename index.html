@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Controle de Estoque</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="container-aplicativo">
+      <aside id="barra-lateral">
+        <div class="cabecalho-barra-lateral">
+          <h2>Controle de Estoque</h2>
+        </div>
+        <nav class="navegacao-barra-lateral">
+          <a href="#" class="ativo">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+              ></path>
+            </svg>
+            <span>Produtos</span>
+          </a>
+        </nav>
+      </aside>
+      <div id="sobreposicao-barra-lateral"></div>
+      <div class="conteudo-principal">
+        <header class="barra-navegacao">
+          <button id="botao-menu">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <h1>Painel de Produtos</h1>
+          <div style="width: 24px"></div>
+        </header>
+        <main class="area-conteudo">
+          <div class="cartao-gerenciamento">
+            <div class="cabecalho-cartao">
+              <h1>Gerenciar Eletrodomésticos</h1>
+              <p>Adicione e remova produtos do seu inventário.</p>
+            </div>
+            <form id="formulario-produto" class="formulario-produto">
+              <div class="grupo-formulario largura-total">
+                <label for="nome-produto">Nome do Produto</label
+                ><input
+                  type="text"
+                  id="nome-produto"
+                  placeholder="Ex: Geladeira Frost Free"
+                  required
+                />
+              </div>
+              <div class="grupo-formulario">
+                <label for="sku-produto">SKU</label
+                ><input
+                  type="text"
+                  id="sku-produto"
+                  placeholder="Ex: GLDF-001"
+                  required
+                />
+              </div>
+              <div class="grupo-formulario">
+                <label for="quantidade-produto">Quantidade</label
+                ><input
+                  type="number"
+                  id="quantidade-produto"
+                  placeholder="0"
+                  min="0"
+                  required
+                />
+              </div>
+              <div class="grupo-formulario largura-total">
+                <label for="preco-produto">Preço (R$)</label
+                ><input
+                  type="text"
+                  id="preco-produto"
+                  placeholder="1.500,00"
+                  required
+                />
+              </div>
+              <div class="grupo-formulario largura-total acoes-formulario">
+                <button
+                  type="submit"
+                  id="botao-enviar"
+                  class="botao-formulario"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  <span>Adicionar Produto</span>
+                </button>
+              </div>
+            </form>
+            <div class="container-tabela-produtos">
+              <table class="tabela-produtos">
+                <thead>
+                  <tr>
+                    <th>Produto</th>
+                    <th>SKU</th>
+                    <th>Quantidade</th>
+                    <th>Preço</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="lista-produtos"></tbody>
+              </table>
+              <div id="estado-vazio" class="estado-vazio" style="display: none">
+                Nenhum produto cadastrado ainda.
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <div id="modal-venda" class="modal">
+      <div class="modal-sobreposicao"></div>
+      <div class="modal-conteudo">
+        <h2>Vender Produto</h2>
+        <p>
+          Produto:
+          <span id="modal-nome-produto" class="nome-produto-destaque"></span>
+        </p>
+        <div class="grupo-formulario">
+          <label for="quantidade-venda"
+            >Quantidade a vender (Em estoque:
+            <span id="modal-estoque-produto"></span>)</label
+          ><input type="number" id="quantidade-venda" min="1" />
+        </div>
+        <div class="modal-acoes">
+          <button
+            type="button"
+            class="botao-formulario botao-cancelar"
+            style="
+              background-color: var(--cinza-borda);
+              color: var(--texto-escuro);
+            "
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            id="botao-confirmar-venda"
+            class="botao-formulario"
+            style="
+              background-color: var(--cor-principal-roxo);
+              color: var(--branco);
+            "
+          >
+            Confirmar Venda
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="modal-adicionar-quantidade" class="modal">
+      <div class="modal-sobreposicao"></div>
+      <div class="modal-conteudo">
+        <h2>Adicionar Estoque</h2>
+        <p>
+          Produto:
+          <span
+            id="nome-produto-adicionar-quantidade"
+            class="nome-produto-destaque"
+          ></span>
+        </p>
+        <div class="grupo-formulario">
+          <label for="input-adicionar-quantidade">Quantidade a adicionar</label
+          ><input
+            type="number"
+            id="input-adicionar-quantidade"
+            min="1"
+            placeholder="0"
+          />
+        </div>
+        <div class="modal-acoes">
+          <button
+            type="button"
+            class="botao-formulario botao-cancelar"
+            style="
+              background-color: var(--cinza-borda);
+              color: var(--texto-escuro);
+            "
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            id="botao-confirmar-adicao-quantidade"
+            class="botao-formulario"
+            style="background-color: var(--verde-sucesso); color: var(--branco)"
+          >
+            Adicionar ao Estoque
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="modal-confirmar-exclusao" class="modal">
+      <div class="modal-sobreposicao"></div>
+      <div class="modal-conteudo">
+        <h2>Confirmar Exclusão</h2>
+        <p>
+          Você tem certeza que deseja remover o produto
+          <span id="nome-produto-excluir" class="nome-produto-destaque"></span>?
+          Esta ação não pode ser desfeita.
+        </p>
+        <div class="modal-acoes">
+          <button
+            type="button"
+            class="botao-formulario botao-cancelar"
+            style="
+              background-color: var(--cinza-borda);
+              color: var(--texto-escuro);
+            "
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            id="botao-confirmar-exclusao"
+            class="botao-formulario"
+            style="
+              background-color: var(--vermelho-perigo);
+              color: var(--branco);
+            "
+          >
+            Excluir Produto
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
